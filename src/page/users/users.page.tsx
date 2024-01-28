@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {navigateAdminPage, navigateUserDetailsPage} from "../admin/admin.destination";
 
 interface FormState {
     id: number,
@@ -25,11 +26,11 @@ const UsersPage: React.FC = () => {
 
         const id = formState.id;
 
-        navigate(`/admin/users/${id}`)
+        navigateUserDetailsPage(navigate, id)
     }
 
     const handleBack = () => {
-        navigate("/admin")
+        navigateAdminPage(navigate)
     }
 
     return (

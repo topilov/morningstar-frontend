@@ -2,6 +2,10 @@ import React, {useState} from "react";
 import {useAuthForm} from "../../utils/useAuthForm"
 import "./auth.page.css"
 import {useNavigate} from "react-router-dom";
+import {navigateRegisterPage} from "./auth.destination";
+import {login} from "../../api/auth/auth.api";
+import {navigateHomePage} from "../home/home.destination";
+import {getJwtToken, setJwtToken} from "../../api/api.config";
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate()
@@ -17,11 +21,17 @@ const LoginPage: React.FC = () => {
     ) => {
         event.preventDefault()
 
-        console.log("Try login")
+        login(formState.username, formState.password).then((response) => {
+            if (response) {
+                setJwtToken(response.token)
+                console.log(getJwtToken())
+                navigateHomePage(navigate)
+            }
+        })
     }
 
     const handleRegister = () => {
-        navigate("/register")
+        navigateRegisterPage(navigate)
     }
 
     return (

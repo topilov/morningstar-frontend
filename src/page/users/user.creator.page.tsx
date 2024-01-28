@@ -1,12 +1,15 @@
-import React, {useState} from "react";
+import React, {useReducer, useState} from "react";
 import {User} from "../../entity/user";
-import {createUser} from "../../api/user.api";
+import {createUser} from "../../api/users/user.api";
 import {useNavigate} from "react-router-dom";
+import {navigateAdminPage} from "../admin/admin.destination";
 
 interface FormState {
     id: string;
     username: string;
+    password: string;
     balance: string;
+    role: string;
 }
 
 const UserCreatorPage: React.FC = () => {
@@ -14,7 +17,9 @@ const UserCreatorPage: React.FC = () => {
     const [formState, setFormState] = useState<FormState>({
         id: '',
         username: '',
+        password: '',
         balance: '',
+        role: 'ROLE_USER'
     });
     const [formErrors, setFormErrors] = useState<Partial<FormState>>()
 
@@ -59,7 +64,7 @@ const UserCreatorPage: React.FC = () => {
     }
 
     const handleBack = () => {
-        navigate("/admin")
+        navigateAdminPage(navigate)
     }
 
     return (
@@ -89,6 +94,16 @@ const UserCreatorPage: React.FC = () => {
                     {formErrors?.username && <p>{formErrors.username}</p>}
                 </div>
                 <div className="input-container">
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type="text"
+                        name="password"
+                        value={formState.password}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="input-container">
                     <label htmlFor="balance">Balance</label>
                     <input
                         type="text"
@@ -98,6 +113,16 @@ const UserCreatorPage: React.FC = () => {
                         required
                     />
                     {formErrors?.balance && <p>{formErrors.balance}</p>}
+                </div>
+                <div className="input-container">
+                    <label htmlFor="role">Role</label>
+                    <input
+                        type="text"
+                        name="role"
+                        value={formState.role}
+                        onChange={handleInputChange}
+                        required
+                    />
                 </div>
                 <button type="submit" className="button-primary">Create</button>
                 <button type="button" className="button-secondary" onClick={handleBack}>Back</button>

@@ -1,19 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import {navigateUserCreatePage, navigateUsersPage} from "./admin.destination";
+import {navigateHomePage} from "../home/home.destination";
 
 const AdminPage = () => {
     const navigate = useNavigate()
 
     const handleCreateUserClick = () => {
-        navigate("/admin/users/create")
+        navigateUserCreatePage(navigate)
     }
 
     const handleUsersClick = () => {
-        navigate("/admin/users")
+        navigateUsersPage(navigate)
     }
 
     const handleBack = () => {
-        navigate("/")
+        navigateHomePage(navigate)
     }
 
     return (

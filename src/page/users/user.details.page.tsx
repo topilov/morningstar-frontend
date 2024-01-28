@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {User} from "../../entity/user";
-import {fetchUser} from "../../api/user.api";
+import {fetchUser} from "../../api/users/user.api";
 import {useNavigate} from "react-router-dom";
+import {navigateUsersPage} from "../admin/admin.destination";
 
 interface UserDetailsProps {
     userId: number;
@@ -43,7 +44,7 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ userId }) => {
     }
 
     const handleBack = () => {
-        navigate("/admin/users")
+        navigateUsersPage(navigate)
     }
 
     return (
