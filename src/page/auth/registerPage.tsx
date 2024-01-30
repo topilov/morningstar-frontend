@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import {useAuthForm} from "../../utils/useAuthForm";
 import "./auth.page.css"
 import {useNavigate} from "react-router-dom";
-import {navigateLoginPage} from "./auth.destination";
-import {register} from "../../api/auth/auth.api";
-import {navigateHomePage} from "../home/home.destination";
-import {setJwtToken} from "../../api/api.config";
+import {navigateLoginPage} from "./authDestination";
+import {navigateHomePage} from "../home/homeDestination";
+import {register} from "../../service/authService"
+import {useAuth} from "../../auth/authContext";
 
 const RegisterPage: React.FC = () => {
+    const { authHandler }= useAuth()
     const navigate = useNavigate()
     const { formState, checkboxState, handleInputChange, handleCheckboxChange } = useAuthForm(
         { username: '', password: '', repeatPassword: '' },
@@ -36,10 +37,10 @@ const RegisterPage: React.FC = () => {
         setError(formError)
 
         if (!formError) {
-            register(formState.username, formState.password).then((response) => {
-                if (response) {
-                    setJwtToken(response.token)
+            register(formState.username, formState.password).then((authResponse) => {
+                if (authResponse) {
                     navigateHomePage(navigate)
+                    authHandler(authResponse.user)
                 }
             })
         }

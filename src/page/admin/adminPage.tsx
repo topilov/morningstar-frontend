@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import {navigateUserCreatePage, navigateUsersPage} from "./admin.destination";
-import {navigateHomePage} from "../home/home.destination";
+import {navigateUserCreatePage, navigateUsersPage} from "./adminDestination";
+import {navigateHomePage} from "../home/homeDestination";
 
 const AdminPage = () => {
     const navigate = useNavigate()

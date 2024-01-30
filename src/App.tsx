@@ -1,17 +1,13 @@
-import {Route, Routes} from "react-router-dom";
 import React from "react";
 import "./app.css"
-import homeRoutes from "./route/home.route";
-import adminRoutes from "./route/admin.route";
-import authRoutes from "./route/auth.route";
+import AuthProvider from "./auth/authProvider";
+import Routes from "./route/routes";
 
 const App: React.FC = () => {
     return (
-        <Routes>
-            {homeRoutes()}
-            {authRoutes()}
-            {adminRoutes()}
-        </Routes>
+        <AuthProvider>
+            <Routes/>
+        </AuthProvider>
     )
 }
 

@@ -1,15 +1,15 @@
-import React, {useReducer, useState} from "react";
-import {User} from "../../entity/user";
-import {createUser} from "../../api/users/user.api";
+import React, {useState} from "react";
+import {User, UserRole} from "../../entity/user";
+import {createUser} from "../../api/users/userApi";
 import {useNavigate} from "react-router-dom";
-import {navigateAdminPage} from "../admin/admin.destination";
+import {navigateAdminPage} from "../admin/adminDestination";
 
 interface FormState {
     id: string;
     username: string;
     password: string;
     balance: string;
-    role: string;
+    role: UserRole;
 }
 
 const UserCreatorPage: React.FC = () => {
@@ -19,7 +19,7 @@ const UserCreatorPage: React.FC = () => {
         username: '',
         password: '',
         balance: '',
-        role: 'ROLE_USER'
+        role: UserRole.USER
     });
     const [formErrors, setFormErrors] = useState<Partial<FormState>>()
 
@@ -31,6 +31,13 @@ const UserCreatorPage: React.FC = () => {
             [event.target.name]: event.target.value
         });
     };
+
+    const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setFormState({
+            ...formState,
+            [event.target.id]: event.target.value as UserRole
+        })
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -66,6 +73,12 @@ const UserCreatorPage: React.FC = () => {
     const handleBack = () => {
         navigateAdminPage(navigate)
     }
+
+    const roleOptions = Object.values(UserRole).map((role) => (
+        <option key={role} value={role}>
+            {role}
+        </option>
+    ))
 
     return (
         <div className="main-container">
@@ -116,13 +129,14 @@ const UserCreatorPage: React.FC = () => {
                 </div>
                 <div className="input-container">
                     <label htmlFor="role">Role</label>
-                    <input
-                        type="text"
-                        name="role"
+                    <select
+                        id="role"
                         value={formState.role}
-                        onChange={handleInputChange}
+                        onChange={handleRoleChange}
                         required
-                    />
+                    >
+                        {roleOptions}
+                    </select>
                 </div>
                 <button type="submit" className="button-primary">Create</button>
                 <button type="button" className="button-secondary" onClick={handleBack}>Back</button>

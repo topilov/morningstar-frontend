@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {User} from "../../entity/user";
-import {fetchUser} from "../../api/users/user.api";
 import {useNavigate} from "react-router-dom";
-import {navigateUsersPage} from "../admin/admin.destination";
+import {navigateUsersPage} from "../admin/adminDestination";
+import {getUser} from "../../api/users/userApi";
 
 interface UserDetailsProps {
-    userId: number;
+    username: string | undefined;
 }
 
 interface UserState {
@@ -13,7 +13,7 @@ interface UserState {
     isLoaded: boolean,
 }
 
-const UserDetailsPage: React.FC<UserDetailsProps> = ({ userId }) => {
+const UserDetailsPage: React.FC<UserDetailsProps> = ({ username }) => {
     const navigate = useNavigate()
     const [userState, setUserState] = useState<UserState>({
         user: null,
@@ -22,16 +22,18 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ userId }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedUser = await fetchUser(userId)
+            if (username) {
+                const fetchedUser = await getUser(username)
 
-            setUserState({
-                user: fetchedUser,
-                isLoaded: true
-            })
+                setUserState({
+                    user: fetchedUser,
+                    isLoaded: true
+                })
+            }
         }
 
         fetchData()
-    }, [userId]);
+    }, [username]);
 
     if (!userState.isLoaded) {
         return <div>Loading...</div>

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {navigateAdminPage, navigateUserDetailsPage} from "../admin/admin.destination";
+import {navigateAdminPage, navigateUserDetailsPage} from "../admin/adminDestination";
 
 interface FormState {
     id: number,
