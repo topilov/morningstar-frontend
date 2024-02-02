@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const logoutHandler = () => {
         logout().then(() => {
-            window.location.reload()
+            setIsLoaded(false)
         })
     }
 

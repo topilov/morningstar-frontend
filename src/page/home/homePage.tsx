@@ -1,12 +1,14 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
-import "./home.css"
+import {Outlet, useNavigate} from "react-router-dom";
 import {navigateAdminPage} from "../admin/adminDestination";
 import {navigateLoginPage, navigateRegisterPage} from "../auth/authDestination";
 import {useAuth} from "../../auth/authContext";
 import {UserRole} from "../../entity/user";
+import {navigateContentPage} from "../content/contentDestination";
+import {TopBar} from "../../components/TopBar";
+import {Box, CssBaseline} from "@mui/material";
 
-const HomePage = () => {
+const Root = () => {
     const navigate = useNavigate();
 
     const handleAdminClick = () => {
@@ -21,6 +23,10 @@ const HomePage = () => {
         navigateRegisterPage(navigate)
     }
 
+    const handleContentClick = () => {
+        navigateContentPage(navigate)
+    }
+
     const {user, isLoading, isLoaded, logoutHandler} = useAuth()
 
     const logoutClick = () => {
@@ -28,31 +34,18 @@ const HomePage = () => {
     }
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return (
+            <CssBaseline>
+                <div>Loading...</div>
+            </CssBaseline>)
     }
 
     return (
-        <div className="main-container">
-            {isLoaded && user && (
-                <>
-                    <h1>Username: {user.username}</h1>
-                    <h1>Role: {user.role}</h1>
-                    <h1>Balance: ${user.balance}</h1>
-                    {user.role === UserRole.ADMIN && (
-                        <button id="admin" className="button-primary" onClick={handleAdminClick}>Admin Panel</button>
-                    )
-                    }
-                    <button id="logout" className="button-secondary" onClick={logoutClick}>Log out</button>
-                </>
-            )}
-            {!isLoaded && (
-                <>
-                    <button id="login" className="button-primary" onClick={handleLoginClick}>Sign in</button>
-                    <button id="register" className="button-primary" onClick={handleRegisterClick}>Register</button>
-                </>
-            )}
-        </div>
+        <CssBaseline>
+            <TopBar/>
+            <Outlet/>
+        </CssBaseline>
     )
 }
 
-export default HomePage;
+export default Root;

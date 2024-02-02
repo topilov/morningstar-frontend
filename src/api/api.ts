@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {StatusCodes} from "http-status-codes";
-import {getAccessToken, refreshToken, removeAccessToken, setAccessToken} from "../service/authService";
+import {getAccessToken, refreshToken, removeAccessToken} from "../service/authService";
 
 const api = axios.create({
     baseURL: 'http://localhost:8080',
@@ -24,7 +24,7 @@ const validateAccessToken = async (error: any) => {
     const originalRequest = {...error.config}
     originalRequest._isRetry = true
 
-    if (error.response.status !== StatusCodes.UNAUTHORIZED || !error.config || error.config._isRetry) throw error
+    if (error.response.status !== StatusCodes.UNAUTHORIZED || !error.config || error.config._isRetry || originalRequest.url === "/api/auth/refresh") throw error
 
     try {
         const response = await refreshToken()

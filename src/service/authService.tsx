@@ -18,7 +18,7 @@ export const login = async (username: string, password: string): Promise<AuthRes
     const response = await apiLogin(username, password)
 
     if (response) {
-        setAccessToken(response.token)
+        setAccessToken(response.accessToken)
     }
 
     return response
@@ -28,7 +28,7 @@ export const register = async (username: string, password: string): Promise<Auth
     const response = await apiRegister(username, password)
 
     if (response) {
-        setAccessToken(response.token)
+        setAccessToken(response.accessToken)
     }
 
     return response
@@ -43,7 +43,7 @@ export const refreshToken = async (): Promise<boolean> => {
     const response = await apiRefreshToken()
 
     if (response) {
-        setAccessToken(response.token)
+        setAccessToken(response.accessToken)
     }
 
     return !!response

@@ -1,55 +1,71 @@
-import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {navigateAdminPage, navigateUserDetailsPage} from "../admin/adminDestination";
+import {navigateAdminPage} from "../admin/adminDestination";
+import {User} from "../../entity/user";
+import {useEffect, useState} from "react";
+import {getUsers} from "../../service/userService";
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
-interface FormState {
-    id: number,
+interface UsersState {
+    users: User[] | undefined;
+    isLoaded: boolean
 }
 
-const UsersPage: React.FC = () => {
+const columns: GridColDef[] = [
+    {field: 'id', headerName: 'ID', width: 70,},
+    {field: 'username', headerName: 'Username', width: 130},
+    {field: 'password', headerName: 'Password', width: 600},
+    {field: 'role', headerName: 'Role', width: 130},
+    {field: 'balance', headerName: 'Balance', width: 130},
+    {field: 'createdAt', headerName: 'Created at', width: 250},
+    {field: 'updatedAt', headerName: 'Updated at', width: 250},
+    {field: 'locked', headerName: 'Locked', width: 130},
+]
+
+export const UsersPage = () => {
     const navigate = useNavigate()
-    const [formState, setFormState] = useState<FormState>({
-        id: 0
+    const [usersState, setUsersState] = useState<UsersState>({
+        users: undefined,
+        isLoaded: false
     })
 
-    const handleInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        setFormState({
-            ...formState,
-            [event.target.name]: event.target.value
-        })
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            const fetchedUsers = await getUsers()
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+            setUsersState({
+                users: fetchedUsers?.users,
+                isLoaded: true
+            })
+        }
 
-        const id = formState.id;
+        fetchData()
+    }, []);
 
-        navigateUserDetailsPage(navigate, id)
-    }
-
-    const handleBack = () => {
+    const handleBackClick = () => {
         navigateAdminPage(navigate)
     }
 
+    if (usersState.users === undefined) {
+        return <div>Loading</div>
+    }
+
     return (
-        <div className="main-container">
-            <h1>Users</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="id">Id</label>
-                <input
-                    type="text"
-                    name="id"
-                    value={formState.id}
-                    onChange={handleInputChange}
-                    inputMode="numeric"
-                />
-                <button type="submit" className="button-primary">Find</button>
-                <button type="button" className="button-secondary" onClick={handleBack}>Back</button>
-            </form>
+        <div>
+            <DataGrid
+                rows={usersState.users}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: {page: 0, pageSize: 10},
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+            />
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', p: 4}}>
+                <Button color="secondary" onClick={handleBackClick}>Back</Button>
+            </Box>
         </div>
     )
 }
-
-export default UsersPage;

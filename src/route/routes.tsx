@@ -1,17 +1,24 @@
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import homeRoutes from "./homeRoute";
+import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import authRoutes from "./authRoute";
 import adminRoutes from "./adminRoute";
 import React from "react";
+import contentRoutes from "./contentRoute";
+import Root from "../page/home/homePage";
 
 const Routes = () => {
     const router = createBrowserRouter([
-        ...homeRoutes,
-        ...authRoutes,
-        ...adminRoutes
+        {
+            path: "/",
+            element: <Root />,
+            children: [
+                ...authRoutes,
+                ...adminRoutes,
+                ...contentRoutes
+            ]
+        }
     ])
 
-    return <RouterProvider router={router}></RouterProvider>
+    return <RouterProvider router={router}/>
 }
 
 export default Routes;

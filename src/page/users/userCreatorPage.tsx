@@ -3,6 +3,19 @@ import {User, UserRole} from "../../entity/user";
 import {createUser} from "../../api/users/userApi";
 import {useNavigate} from "react-router-dom";
 import {navigateAdminPage} from "../admin/adminDestination";
+import {MenuBox} from "../../components/MenuBox";
+import {
+    Box, Button,
+    FormControl,
+    Icon,
+    InputLabel,
+    MenuItem, OutlinedInput,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Typography
+} from "@mui/material";
+import {AccessibilityNew, AccessibilityNewOutlined, AccessibilityNewRounded, PersonOutline} from "@mui/icons-material";
 
 interface FormState {
     id: string;
@@ -10,16 +23,18 @@ interface FormState {
     password: string;
     balance: string;
     role: UserRole;
+    locked: boolean;
 }
 
-const UserCreatorPage: React.FC = () => {
+const UserCreatorPage = () => {
     const navigate = useNavigate()
     const [formState, setFormState] = useState<FormState>({
         id: '',
         username: '',
         password: '',
+        role: UserRole.USER,
         balance: '',
-        role: UserRole.USER
+        locked: false
     });
     const [formErrors, setFormErrors] = useState<Partial<FormState>>()
 
@@ -32,10 +47,10 @@ const UserCreatorPage: React.FC = () => {
         });
     };
 
-    const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleRoleChange = (event: SelectChangeEvent) => {
         setFormState({
             ...formState,
-            [event.target.id]: event.target.value as UserRole
+            role: event.target.value as UserRole
         })
     }
 
@@ -58,6 +73,7 @@ const UserCreatorPage: React.FC = () => {
         }
 
         const user: User = {
+            createdAt: null, updatedAt: null,
             ...formState,
             id: Number(formState.id),
             balance: Number(formState.balance)
@@ -75,12 +91,76 @@ const UserCreatorPage: React.FC = () => {
     }
 
     const roleOptions = Object.values(UserRole).map((role) => (
-        <option key={role} value={role}>
-            {role}
-        </option>
+        <MenuItem key={role} value={role}>{role}</MenuItem>
     ))
 
     return (
+        <MenuBox  maxWidth="sm" mx="auto" my={8}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", }}>
+                <Icon>
+                    <AccessibilityNew />
+                </Icon>
+                <Typography component="h1" variant="h6">Create User</Typography>
+                <Box component="form" onSubmit={handleSubmit}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="id"
+                        label="Id"
+                        value={formState.id}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="username"
+                        label="Username"
+                        value={formState.username}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        value={formState.password}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="balance"
+                        label="Balance"
+                        value={formState.id}
+                        onChange={handleInputChange}
+                    />
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                        <InputLabel id="role-label">Role</InputLabel>
+                        <Select
+                            labelId="role-label"
+                            required
+                            fullWidth
+                            id="role"
+                            name="Role"
+                            value={formState.role}
+                            label="Role"
+                            onChange={handleRoleChange}
+                        >
+                            {roleOptions}
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Button type="submit" color="inherit" fullWidth variant="outlined" sx={{mt: 4}}>Create user</Button>
+                <Button color="secondary" sx={{mt: 2}} onClick={handleBack}>Back</Button>
+            </Box>
+        </MenuBox>
+    )
+
+/*    return (
         <div className="main-container">
             <h1>Create User</h1>
             <form onSubmit={handleSubmit}>
@@ -142,7 +222,7 @@ const UserCreatorPage: React.FC = () => {
                 <button type="button" className="button-secondary" onClick={handleBack}>Back</button>
             </form>
         </div>
-    )
+    )*/
 }
 
 export default UserCreatorPage;

@@ -2,6 +2,12 @@ import api from "../api";
 import {User} from "../../entity/user";
 import {StatusCodes} from "http-status-codes";
 
+const AUTH_ENDPOINT = "/api/auth"
+export const REFRESH_TOKEN_ENDPOINT = `${AUTH_ENDPOINT}/refresh`
+export const LOGIN_ENDPOINT = `${AUTH_ENDPOINT}/login`
+export const REGISTER_ENDPOINT = `${AUTH_ENDPOINT}/register`
+export const LOGOUT_ENDPOINT = `/logout`
+
 interface LoginRequest {
     username: string,
     password: string,
@@ -13,12 +19,12 @@ interface RegisterRequest {
 }
 
 export interface AccessTokenResponse {
-    token: string
+    accessToken: string
 }
 
 export interface AuthResponse {
     user: User,
-    token: string,
+    accessToken: string,
 }
 
 export const login = async (username: string, password: string): Promise<AuthResponse | null> => {
@@ -28,10 +34,9 @@ export const login = async (username: string, password: string): Promise<AuthRes
             password: password,
         }
 
-        const response = await api.post<AuthResponse>('api/auth/login', loginRequest)
+        const response = await api.post<AuthResponse>(LOGIN_ENDPOINT, loginRequest)
         return response.data
     } catch (e) {
-        console.error('Error while login', e)
         return null
     }
 }
@@ -42,30 +47,27 @@ export const register = async (username: string, password: string): Promise<Auth
             username: username,
             password: password,
         }
-        const response = await api.post<AuthResponse>('api/auth/register', registerRequest)
+        const response = await api.post<AuthResponse>(REGISTER_ENDPOINT, registerRequest)
         return response.data
     } catch (e) {
-        console.error('Error while register', e)
         return null
     }
 }
 
 export const logout = async (): Promise<boolean> => {
     try {
-        const response = await api.post(`/logout`)
+        const response = await api.post(LOGOUT_ENDPOINT)
         return response.status === StatusCodes.OK
     } catch (e) {
-        console.error(`Error while logout`, e)
         return false
     }
 }
 
 export const refreshToken = async (): Promise<AccessTokenResponse | null> => {
     try {
-        const response = await api.post<AccessTokenResponse>("/api/auth/refresh")
+        const response = await api.post<AccessTokenResponse>(REFRESH_TOKEN_ENDPOINT)
         return response.data
     } catch (e) {
-        console.error("Error while refresh token", e)
         return null
     }
 }

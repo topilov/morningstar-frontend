@@ -1,15 +1,27 @@
 import React, {useState} from "react";
 import {useAuthForm} from "../../utils/useAuthForm"
-import "./auth.page.css"
 import {useNavigate} from "react-router-dom";
 import {navigateRegisterPage} from "./authDestination";
 import {navigateHomePage} from "../home/homeDestination";
 import {login} from "../../service/authService"
 import {useAuth} from "../../auth/authContext";
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormHelperText,
+    Grid, Icon,
+    Link,
+    TextField,
+    Typography
+} from "@mui/material";
+import {MenuBox} from "../../components/MenuBox";
+import {LockOutlined} from "@mui/icons-material";
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate()
-    const { authHandler } = useAuth()
+    const {authHandler} = useAuth()
     const {formState, checkboxState, handleInputChange, handleCheckboxChange} = useAuthForm(
         {username: '', password: ''},
         {showPassword: false},
@@ -35,40 +47,42 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <div className="login-container">
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-container">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formState.username}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type={checkboxState.showPassword ? "text" : "password"}
-                        name="password"
-                        value={formState.password}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <input
-                    type="checkbox"
-                    name="password-visibility"
-                    onChange={handleCheckboxChange}
+        <MenuBox maxWidth="sm" mx="auto" my={8}>
+            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4}}>
+                <Icon sx={{m: 1}}>
+                    <LockOutlined/>
+                </Icon>
+                <Typography component="h1" variant="h6">Sign In</Typography>
+            </Box>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    value={formState.username}
+                    onChange={handleInputChange}
                 />
-                <label htmlFor="password-visibility">Show Password</label>
-                {error && <p className="error-message">{error}</p>}
-                <button type="submit" className="button-primary">Sign in</button>
-                <button className="button-secondary" onClick={handleRegister} type="button">Register</button>
-            </form>
-        </div>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={formState.password}
+                    onChange={handleInputChange}
+                />
+                <Box sx={{mt: 2}}/>
+                <Button type="submit" fullWidth color="inherit" variant="outlined" sx={{mt: 3, mb: 2}}>Sign In</Button>
+                <Button color="secondary" fullWidth onClick={handleRegister}>Sign Up</Button>
+            </Box>
+        </MenuBox>
     )
 }
 

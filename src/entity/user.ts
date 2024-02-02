@@ -6,6 +6,10 @@ export enum UserRole {
 export interface User {
     id: number;
     username: string;
-    balance: number;
+    password: string;
     role: UserRole;
+    balance: number;
+    createdAt: string | null;
+    updatedAt: string | null;
+    locked: boolean;
 }

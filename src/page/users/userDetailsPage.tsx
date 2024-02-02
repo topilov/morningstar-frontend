@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {User} from "../../entity/user";
 import {useNavigate} from "react-router-dom";
-import {navigateUsersPage} from "../admin/adminDestination";
 import {getUser} from "../../api/users/userApi";
+import {navigateFindUserPage} from "../admin/adminDestination";
+import {MenuBox} from "../../components/MenuBox";
+import {Box, Button, Icon, Typography} from "@mui/material";
+import {Person2} from "@mui/icons-material";
 
 interface UserDetailsProps {
-    username: string | undefined;
+    id: number | undefined;
 }
 
 interface UserState {
@@ -13,7 +16,7 @@ interface UserState {
     isLoaded: boolean,
 }
 
-const UserDetailsPage: React.FC<UserDetailsProps> = ({ username }) => {
+const UserDetailsPage: React.FC<UserDetailsProps> = ({id}) => {
     const navigate = useNavigate()
     const [userState, setUserState] = useState<UserState>({
         user: null,
@@ -22,8 +25,8 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ username }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (username) {
-                const fetchedUser = await getUser(username)
+            if (id) {
+                const fetchedUser = await getUser(`${id}`)
 
                 setUserState({
                     user: fetchedUser,
@@ -33,7 +36,7 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ username }) => {
         }
 
         fetchData()
-    }, [username]);
+    }, [id]);
 
     if (!userState.isLoaded) {
         return <div>Loading...</div>
@@ -46,16 +49,28 @@ const UserDetailsPage: React.FC<UserDetailsProps> = ({ username }) => {
     }
 
     const handleBack = () => {
-        navigateUsersPage(navigate)
+        navigateFindUserPage(navigate)
     }
 
     return (
-        <div className="main-container">
-            <h1>{user.username}</h1>
-            <p>ID: {user.id}</p>
-            <p>Balance: {user.balance}</p>
-            <button type="button" className="button-secondary" onClick={handleBack}>Back</button>
-        </div>
+        <MenuBox maxWidth="sm" mx="auto" my={8}>
+            <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", mb: 2}}>
+                <Icon>
+                    <Person2/>
+                </Icon>
+                <Typography component="h1" variant="h6">User Details</Typography>
+            </Box>
+            <Typography>ID: {user.id}</Typography>
+            <Typography>Username: {user.username}</Typography>
+            <Typography>Role: {user.role}</Typography>
+            <Typography>Balance: {user.balance}</Typography>
+            <Typography>Created at: {String(user.createdAt)}</Typography>
+            <Typography>Updated at: {String(user.updatedAt)}</Typography>
+            <Typography>Locked: {String(user.locked)}</Typography>
+            <Box sx={{display: "flex", flexDirection: "column", alignItems: "center", mt: 2}}>
+                <Button color="secondary" onClick={handleBack}>Back</Button>
+            </Box>
+        </MenuBox>
     )
 }
 

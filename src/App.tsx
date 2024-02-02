@@ -1,13 +1,23 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./app.css"
-import AuthProvider from "./auth/authProvider";
+
+import {
+    ThemeProvider,
+} from "@mui/material";
+
+import type {} from '@mui/x-data-grid/themeAugmentation';
 import Routes from "./route/routes";
+import AuthProvider from "./auth/authProvider";
+import {theme} from "./theme/theme";
+
 
 const App: React.FC = () => {
     return (
-        <AuthProvider>
-            <Routes/>
-        </AuthProvider>
+        <ThemeProvider theme={theme}>
+            <AuthProvider>
+                <Routes/>
+            </AuthProvider>
+        </ThemeProvider>
     )
 }
 

@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import React from "react";
-import {navigateUserCreatePage, navigateUsersPage} from "./adminDestination";
+import React, {useState} from "react";
+import {navigateFindUserPage, navigateUserCreatePage, navigateUsersPage} from "./adminDestination";
 import {navigateHomePage} from "../home/homeDestination";
+import {Alert, AlertTitle, AppBar, Box, Button, Icon, Tab, Tabs, Typography} from "@mui/material";
+import {MenuBox} from "../../components/MenuBox";
+import {LockOutlined, PersonOutline} from "@mui/icons-material";
 
 const AdminPage = () => {
     const navigate = useNavigate()
 
     const handleCreateUserClick = () => {
         navigateUserCreatePage(navigate)
+    }
+
+    const handleFindUserClick = () => {
+        navigateFindUserPage(navigate)
     }
 
     const handleUsersClick = () => {
@@ -19,12 +26,18 @@ const AdminPage = () => {
     }
 
     return (
-        <div className="main-container">
-            <h1>Admin Panel</h1>
-            <button className="button-primary" onClick={handleCreateUserClick}>Create User</button>
-            <button className="button-primary" onClick={handleUsersClick}>Users</button>
-            <button type="button" className="button-secondary" onClick={handleBack}>Back</button>
-        </div>
+        <MenuBox>
+            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4, gap: 2}}>
+                <Icon sx={{m: 1}}>
+                    <PersonOutline/>
+                </Icon>
+                <Typography component="h1" variant="h6" sx={{mb: 2}}>Admin Panel</Typography>
+                <Button color="inherit" variant="outlined" fullWidth onClick={handleCreateUserClick}>Create User</Button>
+                <Button color="inherit" variant="outlined" fullWidth onClick={handleFindUserClick}>Find User by Id</Button>
+                <Button color="inherit" variant="outlined" fullWidth onClick={handleUsersClick}>Users</Button>
+                <Button color="secondary" onClick={handleBack}>Back</Button>
+            </Box>
+        </MenuBox>
     )
 }
 
