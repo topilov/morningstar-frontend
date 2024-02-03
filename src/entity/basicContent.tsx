@@ -1,9 +1,6 @@
-import {User} from "./user";
-
-export interface Content {
+export interface BasicContent {
     id: number,
     title: string,
     description: string,
     price: number,
-    owner: User,
 }

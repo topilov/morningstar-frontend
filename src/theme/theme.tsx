@@ -152,6 +152,21 @@ export const theme = createTheme({
                 }
             },
         },
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none',
+                    margin: "2px 6px",
+                    borderRadius: 10,
+                    fontSize: 16,
+                    fontWeight: 500,
+                    '&:hover': {
+                        backgroundColor: '#161b20',
+                        color: '#ffffff',
+                    },
+                },
+            },
+        },
         MuiAppBar: {
             styleOverrides: {
                 root: {

@@ -1,12 +1,11 @@
 import {NavigateFunction} from "react-router-dom";
 
 const CONTENT_PAGE_ROUTE = "/content"
-const UPLOAD_CONTENT_PAGE_ROUTE = "/content/upload"
 
-export const navigateContentPage = (navigate: NavigateFunction) => {
+export const navigateContentsPage = (navigate: NavigateFunction) => {
     navigate(CONTENT_PAGE_ROUTE)
 }
 
-export const navigateUploadContentPage = (navigate: NavigateFunction) => {
-    navigate(UPLOAD_CONTENT_PAGE_ROUTE)
+export const navigateContentPage = (navigate: NavigateFunction, contentId: number) => {
+    navigate(`${CONTENT_PAGE_ROUTE}/${contentId}`)
 }

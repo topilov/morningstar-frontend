@@ -1,7 +1,14 @@
-import UploadContentPage from "../page/content/uploadContentPage";
 import {ProtectedRoute} from "./protectedRoute";
 import {UserRole} from "../entity/user";
+import ContentsPage from "../page/content/contentsPage";
+import React from "react";
+import {useParams} from "react-router-dom";
 import ContentPage from "../page/content/contentPage";
+
+const ContentPageWrapper: React.FC = () => {
+    const {id} = useParams();
+    return <ContentPage contentId={Number(id)}/>;
+}
 
 const contentRoutes = [{
     path: "/content",
@@ -9,12 +16,12 @@ const contentRoutes = [{
     children: [
         {
             path: "",
-            element: <ContentPage />
+            element: <ContentsPage />
         },
         {
-            path: "upload",
-            element: <UploadContentPage />
-        }
+            path: ":id",
+            element: <ContentPageWrapper />
+        },
     ]
 }]
 

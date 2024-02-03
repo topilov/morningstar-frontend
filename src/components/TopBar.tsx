@@ -6,30 +6,19 @@ import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
 import {useAuth} from "../auth/authContext";
 import {UserRole} from "../entity/user";
 import {navigateAdminPage} from "../page/admin/adminDestination";
-import {navigateContentPage} from "../page/content/contentDestination";
+import {navigateContentsPage} from "../page/content/contentDestination";
 
 export const TopBar: React.FC = () => {
     const navigate = useNavigate()
     const { user, isLoaded, logoutHandler } = useAuth()
 
-    const handleSignIn = () => {
-        navigateLoginPage(navigate)
-    }
-
-    const handleSignUp = () => {
-        navigateRegisterPage(navigate)
-    }
-
-    const handleAdminPanel = () => {
-        navigateAdminPage(navigate)
-    }
-
-    const handleContent = () => {
-        navigateContentPage(navigate)
-    }
+    const handleSignIn = () => navigateLoginPage(navigate)
+    const handleSignUp = () => navigateRegisterPage(navigate)
+    const handleAdminPanel = () => navigateAdminPage(navigate)
+    const handleContents = () => navigateContentsPage(navigate)
 
     return (
-        <AppBar position="fixed" sx={{width: '100%', borderBottom: 1, borderColor: "#30363d"}}>
+        <AppBar position="static" sx={{ width: '100%', borderBottom: 1, borderColor: "#30363d"}}>
             <Toolbar>
                 <IconButton edge="start" color="inherit" aria-label="menu">
                     <ChildFriendlyIcon/>
@@ -46,7 +35,7 @@ export const TopBar: React.FC = () => {
                             { user?.role === UserRole.ADMIN && (
                                 <Button color="inherit" onClick={handleAdminPanel}>Admin Panel</Button>
                             )}
-                            <Button color="inherit" onClick={handleContent}>Content</Button>
+                            <Button color="inherit" onClick={handleContents}>Contents</Button>
                             <Button color="inherit" onClick={logoutHandler}>Log out</Button>
                         </>
                     ) : (

@@ -47,42 +47,45 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <MenuBox maxWidth="sm" mx="auto" my={8}>
-            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4}}>
-                <Icon sx={{m: 1}}>
-                    <LockOutlined/>
-                </Icon>
-                <Typography component="h1" variant="h6">Sign In</Typography>
-            </Box>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
-                    value={formState.username}
-                    onChange={handleInputChange}
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={formState.password}
-                    onChange={handleInputChange}
-                />
-                <Box sx={{mt: 2}}/>
-                <Button type="submit" fullWidth color="inherit" variant="outlined" sx={{mt: 3, mb: 2}}>Sign In</Button>
-                <Button color="secondary" fullWidth onClick={handleRegister}>Sign Up</Button>
-            </Box>
-        </MenuBox>
+        <Grid container justifyContent="center" alignItems="center" sx={{minHeight: "100vh"}}>
+            <MenuBox my={8}>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4}}>
+                    <Icon sx={{m: 1}}>
+                        <LockOutlined/>
+                    </Icon>
+                    <Typography component="h1" variant="h6">Sign In</Typography>
+                </Box>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        value={formState.username}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        value={formState.password}
+                        onChange={handleInputChange}
+                    />
+                    <Box sx={{mt: 2}}/>
+                    <Button type="submit" fullWidth color="inherit" variant="outlined" sx={{mt: 3, mb: 2}}>Sign
+                        In</Button>
+                    <Button color="secondary" fullWidth onClick={handleRegister}>Sign Up</Button>
+                </Box>
+            </MenuBox>
+        </Grid>
     )
 }
 

@@ -1,20 +1,65 @@
-import {getContentFile, getContent as apiGetContent, uploadContent as apiUploadContent} from "../api/content/contentApi";
+import {
+    getBasicContents as apiGetBasicContents,
+    getFileContent as apiGetFileContent,
+    getBasicContent as apiGetBasicContent,
+    getImagePreviewContent as apiGetImagePreviewContent,
+    uploadContent as apiUploadContent,
+    UploadContentRequest
+} from "../api/content/contentApi";
+import {ImagePreviewContent} from "../entity/imagePreviewContent";
+import {FileContent} from "../entity/fileContent";
 
-export const getContent = async (contentId: number) => {
-    return apiGetContent(contentId)
+export const getBasicContent = async (contentId: number) => {
+    return await apiGetBasicContent(contentId)
 }
 
-export const getContentFileSrc = async (contentId: number): Promise<string | null> => {
-    const response = await getContentFile(contentId)
+export const getFileContent = async (contentId: number) => {
+    const content = await apiGetFileContent(contentId)
 
-    if (!response) {
+    if (!content) {
         return null
     }
 
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(response.data)));
-    return  `data:${response.headers['content-type'].toLowerCase()};base64,${base64}`;
+    performFileContent(content)
+
+    return content
 }
 
-export const uploadContent = async (userId: number, content: FormData) => {
-    return apiUploadContent(userId, content)
+export const getImagePreviewContent = async (contentId: number) => {
+    const content = await apiGetImagePreviewContent(contentId)
+
+    if (!content) {
+        return null
+    }
+
+    performImagePreviewContent(content)
+
+    return content
+}
+
+export const getBasicContents = async () => {
+    const contents = await apiGetBasicContents()
+    return contents;
+}
+
+export const uploadContent = async (userId: number, request: UploadContentRequest) => {
+    return apiUploadContent(userId, request)
+}
+
+const performImagePreviewContent = (imagePreviewContent: ImagePreviewContent) => {
+    if (imagePreviewContent.imagePreview) {
+        imagePreviewContent.imagePreviewSrc = base64ToSrc(imagePreviewContent.imagePreviewType, imagePreviewContent.imagePreview)
+        delete imagePreviewContent.imagePreview
+    }
+}
+
+const performFileContent = (fileContent: FileContent) => {
+    if (fileContent.file) {
+        fileContent.fileSrc = base64ToSrc(fileContent.fileType, fileContent.file)
+        delete fileContent.file
+    }
+}
+
+const base64ToSrc = (contentType: string, base64: Uint8Array) => {
+    return `data:${contentType.toLowerCase()};base64,${base64}`
 }
